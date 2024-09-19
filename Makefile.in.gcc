@@ -1,5 +1,6 @@
 # Versions to build
-BUILDS=mine basic blocked f2c blas
+#BUILDS=minerow minecolumn mineprefetch minealainmemory8 minealainmemory16 minealainmemory32 minealainmemory64 basic blocked f2c blas
+BUILDS=minerow minecolumn mineprefetch minealainmemory8 minealainmemory16 minealainmemory32 minealainmemory64 basic
 
 # C and Fortran compilers
 CC=gcc
