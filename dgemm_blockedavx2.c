@@ -1,8 +1,8 @@
 #include <immintrin.h>
 const char *dgemm_desc = "Simple blocked dgemm.";
 
-// #define ALIAN_MEMORY ;
-// const int alain_bits = 32;
+#define ALIAN_MEMORY ;
+const int alain_bits = 64;
 
 #ifndef BLOCK_SIZE
 #define BLOCK_SIZE ((int)4)
@@ -55,7 +55,7 @@ void basic_dgemm(const int lda, const int M, const int N, const int K,
             __m256d c0 = _mm256_loadu_pd(&C[i * lda]);
 
             // print_double_array(c0, 'i');
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < BLOCK_SIZE; j++)
             {
                 // 将 A[i][j] 的值广播到 256 位寄存器中 (每个寄存器能装载 4 个 double)
                 __m256d a = _mm256_broadcast_sd(&B[i * lda + j]);
@@ -66,10 +66,30 @@ void basic_dgemm(const int lda, const int M, const int N, const int K,
                 // 将 A[i][j] * B[j][*] 并行计算并累加到结果中
                 c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
                 // print_double_array(c0, 'e');
+
+                
             }
+
+
+            // __m256d a = _mm256_broadcast_sd(&B[i * lda + 0]);
+            // __m256d b = _mm256_loadu_pd(&A[0 * lda]);
+            // c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+
+            // a = _mm256_broadcast_sd(&B[i * lda + 1]);
+            // b = _mm256_loadu_pd(&A[1 * lda]);
+            // c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+
+            // a = _mm256_broadcast_sd(&B[i * lda + 2]);
+            // b = _mm256_loadu_pd(&A[2 * lda]);
+            // c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+
+            // a = _mm256_broadcast_sd(&B[i * lda + 3]);
+            // b = _mm256_loadu_pd(&A[3 * lda]);
+            // c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
 
             // 将结果存回 C[i][*]
             _mm256_storeu_pd(&C[i * lda], c0);
+
         }
     }
 }

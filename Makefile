@@ -41,6 +41,9 @@ matmul.o: matmul.c
 dgemm_blockedavx.o: dgemm_blockedavx.c
 	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
+dgemm_blockedavx2.o: dgemm_blockedavx2.c
+	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 

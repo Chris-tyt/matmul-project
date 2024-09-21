@@ -62,10 +62,10 @@ extern const int alain_bits;
 // };
 
 const int test_sizes[] = {
-    8,
-    // 8, 31, 32, 96, 97, 127, 128, 129,
-    // 254, 256, 258, 510, 512, 514
-#define MAX_SIZE 129u
+    // 128,
+    8, 31, 32, 96, 97, 127, 128, 129,
+    254, 256, 258, 510, 512, 514
+#define MAX_SIZE 514u
 };
 
 #define N_SIZES (sizeof(test_sizes) / sizeof(int))
