@@ -1,5 +1,8 @@
 #include <immintrin.h>
-const char *dgemm_desc = "blocked dgemm with avx.";
+const char *dgemm_desc = "blocked dgemm with avx, aligned memory and loop unrolling.";
+
+#define ALIAN_MEMORY ;
+const int alain_bits = 64;
 
 #ifndef BLOCK_SIZE
 #define BLOCK_SIZE ((int)4)
@@ -49,14 +52,24 @@ void basic_dgemm(const int lda, const int M, const int N, const int K,
         {
             __m256d c0 = _mm256_loadu_pd(&C[i * lda]);
 
-            for (int j = 0; j < 4; j++)
-            {
-                __m256d a = _mm256_broadcast_sd(&B[i * lda + j]);
-                __m256d b = _mm256_loadu_pd(&A[j * lda]);
-                c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
-            }
+            __m256d a = _mm256_broadcast_sd(&B[i * lda + 0]);
+            __m256d b = _mm256_loadu_pd(&A[0 * lda]);
+            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+
+            a = _mm256_broadcast_sd(&B[i * lda + 1]);
+            b = _mm256_loadu_pd(&A[1 * lda]);
+            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+
+            a = _mm256_broadcast_sd(&B[i * lda + 2]);
+            b = _mm256_loadu_pd(&A[2 * lda]);
+            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+
+            a = _mm256_broadcast_sd(&B[i * lda + 3]);
+            b = _mm256_loadu_pd(&A[3 * lda]);
+            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
 
             _mm256_storeu_pd(&C[i * lda], c0);
+
         }
     }
 }

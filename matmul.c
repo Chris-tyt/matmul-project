@@ -76,8 +76,8 @@ const int test_sizes[] = {
 void matrix_init(double *A)
 {
     for (int i = 0; i < MAX_SIZE * MAX_SIZE; ++i)
-        A[i] = i+1;
-        // A[i] = drand48();
+        // A[i] = i+1;
+        A[i] = drand48();
 }
 
 /* --

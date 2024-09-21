@@ -44,6 +44,9 @@ dgemm_blockedavx.o: dgemm_blockedavx.c
 dgemm_blockedavx2.o: dgemm_blockedavx2.c
 	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
+dgemm_blockedavx3.o: dgemm_blockedavx3.c
+	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
