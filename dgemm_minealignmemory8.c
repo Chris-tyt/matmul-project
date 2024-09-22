@@ -1,7 +1,7 @@
 #include <xmmintrin.h>
 
 #define ALIAN_MEMORY ;
-const char *dgemm_desc = "My awesome dgemm.";
+const char *dgemm_desc = "Align 8 bytes.";
 const int alain_bits = 8;
 
 void square_dgemm(const int M, const double *A, const double *B, double *C)
