@@ -38,6 +38,15 @@ matmul-veclib: $(OBJS) dgemm_veclib.o
 matmul.o: matmul.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $<
 
+dgemm_blockedavx.o: dgemm_blockedavx.c
+	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+
+dgemm_blockedavx2.o: dgemm_blockedavx2.c
+	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+
+dgemm_blockedavx3.o: dgemm_blockedavx3.c
+	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
@@ -52,6 +61,7 @@ dgemm_mkl.o: dgemm_blas.c
 
 dgemm_veclib.o: dgemm_blas.c
 	clang -o $@ -c $(CFLAGS) $(CPPFLAGS) -DOSX_ACCELERATE $< 
+
 
 # ---
 # Rules for building timing CSV outputs
