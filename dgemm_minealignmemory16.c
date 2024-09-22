@@ -1,4 +1,8 @@
-const char *dgemm_desc = "Calculate by row.";
+#include <xmmintrin.h>
+
+#define ALIAN_MEMORY ;
+const char *dgemm_desc = "Align 16 bytes.";
+const int alain_bits = 16;
 
 void square_dgemm(const int M, const double *A, const double *B, double *C)
 {
@@ -9,9 +13,7 @@ void square_dgemm(const int M, const double *A, const double *B, double *C)
         {
             double cij = C[j * M + i];
             for (k = 0; k < M; ++k)
-            {
                 cij += A[k * M + i] * B[j * M + k];
-            }
             C[j * M + i] = cij;
         }
     }

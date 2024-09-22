@@ -1,6 +1,8 @@
-# Versions to build
-#BUILDS=minerow minecolumn mineprefetch minealainmemory8 minealainmemory16 minealainmemory32 minealainmemory64 basic blocked f2c blas
-#BUILDS=minerow minecolumn mineprefetch minealainmemory8 minealainmemory16 minealainmemory32 minealainmemory64 basic
+# compare align
+#BUILDS=minealignmemory8 minealignmemory16 minealignmemory32 minealignmemory64 basic
+# for small data size
+#BUILDS=minerow minecolumn mineprefetch mineprefetchalign64 minealignmemory64 basic blocked f2c
+# for large data size
 BUILDS=blockedavx blockedavx2 blockedavx3 basic blocked f2c
 
 
