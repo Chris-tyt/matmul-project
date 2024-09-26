@@ -47,6 +47,9 @@ dgemm_blockedavx2.o: dgemm_blockedavx2.c
 dgemm_blockedavx3.o: dgemm_blockedavx3.c
 	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
+dgemm_blockedavx512.o: dgemm_blockedavx512.c
+	$(CC) -march=sapphirerapids -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 

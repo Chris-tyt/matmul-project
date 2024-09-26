@@ -3,8 +3,8 @@
 # for small data size
 #BUILDS=minerow minecolumn mineprefetch mineprefetchalign64 minealignmemory64 basic blocked f2c
 # for large data size
-BUILDS=blockedavx blockedavx2 blockedavx3 basic blocked f2c
-
+#BUILDS=blockedavx blockedavx2 blockedavx3 basic blocked f2c
+BUILDS=blockedavx blockedavx512
 
 # C and Fortran compilers
 CC=gcc

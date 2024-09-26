@@ -62,9 +62,9 @@ extern const int alain_bits;
 // };
 
 const int test_sizes[] = {
-    // 128,
-    8, 31, 32, 96, 97, 127, 128, 129,
-    254, 256, 258, 510, 512, 514
+    8,
+    // 8, 31, 32, 96, 97, 127, 128, 129,
+    // 254, 256, 258, 510, 512, 514
 #define MAX_SIZE 514u
 };
 
@@ -76,8 +76,8 @@ const int test_sizes[] = {
 void matrix_init(double *A)
 {
     for (int i = 0; i < MAX_SIZE * MAX_SIZE; ++i)
-        // A[i] = i+1;
-        A[i] = drand48();
+        A[i] = i+1;
+        // A[i] = drand48();
 }
 
 /* --
