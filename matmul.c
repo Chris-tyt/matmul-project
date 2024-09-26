@@ -40,33 +40,33 @@ extern const int alain_bits;
 
   You may want to modify these to speed debugging...
 */
-// #define MIN_RUNS 4
-#define MIN_RUNS 1
+#define MIN_RUNS 4
+// #define MIN_RUNS 1
 /* #define MIN_SECS 1.0 */
-#define MIN_SECS 0.00001
-// #define MIN_SECS 0.25
+// #define MIN_SECS 0.00001
+#define MIN_SECS 0.25
 
 /*
   Note the strange sizes...  You'll see some interesting effects
   around some of the powers-of-two.
 */
-// const int test_sizes[] = {
-//     31, 32, 96, 97, 127, 128, 129, 191, 192, 229,
-// #if defined(DEBUG_RUN)
-// # define MAX_SIZE 229u
-// #else
-//     255, 256, 257, 319, 320, 321, 417, 479, 480, 511, 512, 639, 640,
-//     767, 768, 769, 1023, 1024, 1025, 1525, 1526, 1527
-// # define MAX_SIZE 1527u
-// #endif
-// };
-
 const int test_sizes[] = {
-    8,
-    // 8, 31, 32, 96, 97, 127, 128, 129,
-    // 254, 256, 258, 510, 512, 514
-#define MAX_SIZE 514u
+    31, 32, 96, 97, 127, 128, 129, 191, 192, 229,
+#if defined(DEBUG_RUN)
+# define MAX_SIZE 229u
+#else
+    255, 256, 257, 319, 320, 321, 417, 479, 480, 511, 512, 639, 640,
+    767, 768, 769, 1023, 1024, 1025, 1525, 1526, 1527
+# define MAX_SIZE 1527u
+#endif
 };
+
+// const int test_sizes[] = {
+//     // 16,
+//     8, 31, 32, 96, 97, 127, 128, 129,
+//     254, 256, 258, 510, 512, 514
+// #define MAX_SIZE 514u
+// };
 
 #define N_SIZES (sizeof(test_sizes) / sizeof(int))
 
@@ -76,8 +76,8 @@ const int test_sizes[] = {
 void matrix_init(double *A)
 {
     for (int i = 0; i < MAX_SIZE * MAX_SIZE; ++i)
-        A[i] = i+1;
-        // A[i] = drand48();
+        // A[i] = i+1;
+        A[i] = drand48();
 }
 
 /* --
