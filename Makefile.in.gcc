@@ -4,8 +4,11 @@
 #BUILDS=minerow minecolumn mineprefetch mineprefetchalign64 minealignmemory64 basic blocked f2c
 # for large data size
 #BUILDS=basic unroll4 unroll8
-#BUILDS=mine basic blocked f2c blas
-BUILDS=mine blocked512avx blas
+BUILDS=mine basic blocked f2c blas
+#BUILDS=mine blocked512avx blas
+#BUILDS=blocked basic
+#BUILDS=blocked512avxmask blocked512avx blas
+#BUILDS=blocked512avxmask blocked512avxmaskalign
 
 # C and Fortran compilers
 CC=gcc
