@@ -23,6 +23,8 @@
 #define FLAGS "unknown"
 #endif
 
+// #define DEBUG_RUN
+
 /*
   Your function _MUST_ have the following signature:
 */
@@ -53,9 +55,9 @@ extern const int alain_bits;
 const int test_sizes[] = {
     31, 32, 96, 97, 127, 128, 129, 191, 192, 229,
 #if defined(DEBUG_RUN)
-# define MAX_SIZE 229u
+# define MAX_SIZE 256u
 #else
-    255, 256, 257, 319, 320, 321, 417, 479, 480, 511, 512, 639, 640,
+    255, 256, 257, 319, 320, 321, 417, 479, 480, 511, 512, 513, 639, 640,
     767, 768, 769, 1023, 1024, 1025, 1525, 1526, 1527
 # define MAX_SIZE 1527u
 #endif
@@ -76,8 +78,8 @@ const int test_sizes[] = {
 void matrix_init(double *A)
 {
     for (int i = 0; i < MAX_SIZE * MAX_SIZE; ++i)
-        // A[i] = i+1;
-        A[i] = drand48();
+        A[i] = i+1;
+        // A[i] = dran48();
 }
 
 /* --

@@ -1,5 +1,5 @@
 #include <immintrin.h>
-const char *dgemm_desc = "blocked dgemm with avx.";
+const char *dgemm_desc = "blocked dgemm with avx512.";
 
 #ifndef BLOCK_SIZE
 #define BLOCK_SIZE ((int)8)
@@ -53,22 +53,15 @@ void basic_dgemm(const int lda, const int M, const int N, const int K,
             for (int j = 0; j < 8; j++)
             {
                 __m512d a = _mm512_set1_pd(B[i * lda + j]);
-                // __m512d a = _mm512_broadcast_sd(&B[i * lda + j]);
-                // print_double_array(a,'a');
 
-                // 使用 AVX-512 加载 512 位数据 (8 doubles)
+                // use AVX-512 load 512 bits data (8 doubles)
                 __m512d b = _mm512_loadu_pd(&A[j * lda]);
-                // __m512d b = _mm512_loadu_pd(&A[j * lda]);
-                // print_double_array(b,'b');
 
-                // 执行加法和乘法的计算
+                // exe mul and add op
                 c0 = _mm512_fmadd_pd(a, b, c0);  // c0 = a * b + c0
-                // c0 = _mm512_add_pd(c0, _mm512_mul_pd(a, b));
-                // print_double_array(c0,'e');
             }
 
             _mm512_storeu_pd(&C[i * lda], c0);
-            // print_double_array(c0,'t');
         }
     }
 }

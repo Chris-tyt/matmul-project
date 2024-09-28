@@ -1,5 +1,5 @@
 #include <immintrin.h>
-const char *dgemm_desc = "blocked dgemm with avx.";
+const char *dgemm_desc = "blocked dgemm with avx256.";
 
 #ifndef BLOCK_SIZE
 #define BLOCK_SIZE ((int)4)

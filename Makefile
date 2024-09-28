@@ -38,16 +38,16 @@ matmul-veclib: $(OBJS) dgemm_veclib.o
 matmul.o: matmul.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $<
 
-dgemm_blockedavx.o: dgemm_blockedavx.c
+dgemm_blockeda%.o: dgemm_blockeda%.c
 	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
-dgemm_blockedavx2.o: dgemm_blockedavx2.c
-	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+dgemm_blocked512a%.o: dgemm_blocked512a%.c
+	$(CC) -march=sapphirerapids -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
-dgemm_blockedavx3.o: dgemm_blockedavx3.c
-	$(CC) -mavx2 -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
+dgemm_blockedo2avx512.o: dgemm_blockedo2avx512.c
+	$(CC) -march=sapphirerapids -c $(CFLAGS) $(OPTFLAGS) -O2 $<
 
-dgemm_blockedavx512.o: dgemm_blockedavx512.c
+dgemm_mine.o: dgemm_mine.c
 	$(CC) -march=sapphirerapids -c $(CFLAGS) $(OPTFLAGS) $(CPPFLAGS) $<
 
 %.o: %.c
