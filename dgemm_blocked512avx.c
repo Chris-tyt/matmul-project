@@ -1,19 +1,16 @@
 #include <immintrin.h>
-const char *dgemm_desc = "blocked dgemm with avx, aligned memory and loop unrolling.";
-
-#define ALIAN_MEMORY ;
-const int alain_bits = 64;
+const char *dgemm_desc = "blocked dgemm with avx512.";
 
 #ifndef BLOCK_SIZE
-#define BLOCK_SIZE ((int)4)
+#define BLOCK_SIZE ((int)8)
 #endif
 
-void print_double_array(__m256d arr, char a)
+void print_double_array(__m512d arr, char a)
 {
-    double *temp = (double *)malloc(4 * sizeof(double));
-    _mm256_storeu_pd(temp, arr);
+    double *temp = (double *)malloc(8 * sizeof(double));
+    _mm512_storeu_pd(temp, arr);
     printf("%c ", a);
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 8; i++)
     {
         printf("%f ", temp[i]);
     }
@@ -50,26 +47,21 @@ void basic_dgemm(const int lda, const int M, const int N, const int K,
     {
         for (int i = 0; i < BLOCK_SIZE; i++)
         {
-            __m256d c0 = _mm256_loadu_pd(&C[i * lda]);
+            __m512d c0 = _mm512_loadu_pd(&C[i * lda]);
+            // print_double_array(c0,'i');
 
-            __m256d a = _mm256_broadcast_sd(&B[i * lda + 0]);
-            __m256d b = _mm256_loadu_pd(&A[0 * lda]);
-            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+            for (int j = 0; j < 8; j++)
+            {
+                __m512d a = _mm512_set1_pd(B[i * lda + j]);
 
-            a = _mm256_broadcast_sd(&B[i * lda + 1]);
-            b = _mm256_loadu_pd(&A[1 * lda]);
-            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+                // use AVX-512 load 512 bits data (8 doubles)
+                __m512d b = _mm512_loadu_pd(&A[j * lda]);
 
-            a = _mm256_broadcast_sd(&B[i * lda + 2]);
-            b = _mm256_loadu_pd(&A[2 * lda]);
-            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
+                // exe mul and add op
+                c0 = _mm512_fmadd_pd(a, b, c0);  // c0 = a * b + c0
+            }
 
-            a = _mm256_broadcast_sd(&B[i * lda + 3]);
-            b = _mm256_loadu_pd(&A[3 * lda]);
-            c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
-
-            _mm256_storeu_pd(&C[i * lda], c0);
-
+            _mm512_storeu_pd(&C[i * lda], c0);
         }
     }
 }

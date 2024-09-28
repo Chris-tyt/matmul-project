@@ -3,8 +3,9 @@
 # for small data size
 #BUILDS=minerow minecolumn mineprefetch mineprefetchalign64 minealignmemory64 basic blocked f2c
 # for large data size
-BUILDS=blockedavx blockedavx2 blockedavx3 basic blocked f2c
-
+#BUILDS=basic unroll4 unroll8
+#BUILDS=mine basic blocked f2c blas
+BUILDS=mine blocked512avx blas
 
 # C and Fortran compilers
 CC=gcc
@@ -15,7 +16,7 @@ LD=gfortran
 PYTHON=python3
 
 # Compiler optimization flags.  You will definitely want to play with these!
-OPTFLAGS = -O3 
+OPTFLAGS = -O3
 CFLAGS = 
 FFLAGS =
 LDFLAGS = -fopenmp

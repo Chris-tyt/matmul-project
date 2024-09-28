@@ -1,65 +1,65 @@
 #include <immintrin.h>
-const char *dgemm_desc = "blocked dgemm with avx256 and aligned memory.";
-
+#include <string.h>
+#include <stdio.h>
+const char *dgemm_desc = "blocked dgemm with avx512 and aligned 16 bytes and prefetch and o2 optimization";
 #define ALIAN_MEMORY ;
 const int alain_bits = 16;
 
 #ifndef BLOCK_SIZE
-#define BLOCK_SIZE ((int)4)
+#define BLOCK_SIZE ((int)8)
 #endif
 
-void print_double_array(__m256d arr, char a)
+void store_double_array(__m512d arr, double *C, int size)
 {
-    double *temp = (double *)malloc(4 * sizeof(double));
-    _mm256_storeu_pd(temp, arr);
+    double *temp = (double *)malloc(8 * sizeof(double));
+    _mm512_storeu_pd(temp, arr);
+    memcpy(C, temp, size * 8);
+}
+
+void print_m512_array(__m512d arr, char a)
+{
+    double *temp = (double *)malloc(8 * sizeof(double));
+    _mm512_storeu_pd(temp, arr);
     printf("%c ", a);
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 8; i++)
     {
         printf("%f ", temp[i]);
     }
     printf("\n");
 }
 
-/*
-  A is M-by-K
-  B is K-by-N
-  C is M-by-N
+void print_double_array(double *arr, char a)
+{
+    printf("%c ", a);
+    for (int i = 0; i < 8; i++)
+    {
+        printf("%f ", arr[i]);
+    }
+    printf("\n");
+}
 
-  lda is the leading dimension of the matrix (the M of square_dgemm).
-*/
 void basic_dgemm(const int lda, const int M, const int N, const int K,
                  const double *A, const double *B, double *C)
 {
-    if (M != BLOCK_SIZE || N != BLOCK_SIZE || K != BLOCK_SIZE)
+    for (int i = 0; i < N; i++)
     {
-        int i, j, k;
-        for (i = 0; i < M; ++i)
-        {
-            for (j = 0; j < N; ++j)
-            {
-                double cij = C[j * lda + i];
-                for (k = 0; k < K; ++k)
-                {
-                    cij += A[k * lda + i] * B[j * lda + k];
-                }
-                C[j * lda + i] = cij;
-            }
-        }
-    }
-    else
-    {
-        for (int i = 0; i < BLOCK_SIZE; i++)
-        {
-            __m256d c0 = _mm256_loadu_pd(&C[i * lda]);
-            for (int j = 0; j < BLOCK_SIZE; j++)
-            {
-                __m256d a = _mm256_broadcast_sd(&B[i * lda + j]);
-                __m256d b = _mm256_loadu_pd(&A[j * lda]);
-                c0 = _mm256_add_pd(c0, _mm256_mul_pd(a, b));
-            }
-            _mm256_storeu_pd(&C[i * lda], c0);
+        __m512d c0 = _mm512_loadu_pd(&C[i * lda]);
+        _mm_prefetch(&B[i * lda], _MM_HINT_T0);
 
+        for (int j = 0; j < K; j++)
+        {
+            __m512d a = _mm512_set1_pd(B[i * lda + j]);
+
+            // use AVX-512 load 512 bits data (8 doubles)
+            __m512d b = _mm512_loadu_pd(&A[j * lda]);
+
+            // exe mul and add op
+            c0 = _mm512_fmadd_pd(a, b, c0); // c0 = a * b + c0
         }
+        __mmask8 mask = (1 << M) - 1;
+        _mm512_mask_storeu_pd(&C[i * lda], mask, c0);
+        // print_m512_array(c0, 'o');
+        // print_double_array(&C[i * lda], 'm');
     }
 }
 
